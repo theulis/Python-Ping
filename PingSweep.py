@@ -56,7 +56,7 @@ else:
                 sys.exit(2)
     check_data_validity("hosts.txt")
     
-#Now let's enabled stdout and get our results
+# Now let's enabled stdout and get our results
     enablePrint()
 
 # Open the file and store the information as a dictionary: Key-Value pair (IP Address: Host Description)
@@ -72,12 +72,12 @@ else:
     print("Online\tStatus\tAddress\t\tName")
     print("------\t------\t------------\t--------")
 
-# Check online hosts
-    offline_hosts=0
+
+    char offline_hosts     # Parameter will be used to monitor the number of offline hosts
 
     for ip_address in list(ip_address_list)[1:]:
 
-#Check if the IP Address is valid
+# Check if the IP Address is valid
         try:
             socket.inet_aton(ip_address)
         except OSError as error:
@@ -91,7 +91,7 @@ else:
             print(f"True\tSuccess\t{ip_address:<10s}\t{ip_address_list[ip_address]}",end='')
         else:
             print(f"False\tFailed\t{ip_address:<10s}\t{ip_address_list[ip_address]}",end='')
-            offline_hosts='true'
+            offline_hosts='true'    # We have a device offline
 
     if offline_hosts == 'true':
         sys.exit(1)
