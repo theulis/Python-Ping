@@ -73,7 +73,7 @@ else:
     print("------\t------\t------------\t--------")
 
 
-    char offline_hosts     # Parameter will be used to monitor the number of offline hosts
+    offline_hosts=0   # Parameter will be used to monitor the number of offline hosts
 
     for ip_address in list(ip_address_list)[1:]:
 
