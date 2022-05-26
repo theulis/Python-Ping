@@ -63,6 +63,7 @@ else:
 
         response = os.popen(f"ping {ip_address} -c 1 -W 1").read()
         if "64 bytes" in response:
-            print(f"True\tSuccess\t{ip_address}\t\t{ip_address_list[ip_address]}")
+            print(f"True\tSuccess\t{ip_address:<10s}\t{ip_address_list[ip_address]}")
         else:
-            print(f"False\tFailed\t{ip_address}\t\t{ip_address_list[ip_address]}")
+            print(f"False\tFailed\t{ip_address:<10s}\t{ip_address_list[ip_address]}")
+
