@@ -6,10 +6,16 @@ from urllib.error import HTTPError
 import socket
 import csv
 
-# Ideally we could have a centralised location where we can keep our hosts file
-# We could use GoogleDrive API to download the (private) hosts.txt file locally. 
+# Ideally we could have a centralised location where we can keep our hosts file 
+# and use GoogleDrive API to download the (private) hosts.txt file locally. 
 # In this example we will download a public file from GitHub
 # We use wget, so we need to install the wget package: pip install wget before we run this script
+
+# Run this script and include the exit code option:  ./PingSweep.py; echo $?
+# Exit Code = 2 : Issues with the file
+# Exit Code = 1 : One or more hosts not online
+# Exit Code = 0 : All hosts online
+
 
 # We will create two functions that can help us to silence the stdout when needed. 
 
@@ -34,6 +40,8 @@ try:
 except HTTPError as err:
         enablePrint()
         print("------> Problem while downloading file (hosts.txt) for GitHub repo")
+        sys.exit(2)
+
 else:
     
     # Check if the file is a valid CSV file with a comma as the delimiter
@@ -43,7 +51,9 @@ else:
             try:
                 dialect = csv.Sniffer().sniff(csvfile.read(1024), delimiters = ",")
             except:
-                sys.exit("------> File hosts.txt not a valid CSV file with comma delimeter")
+                enablePrint()
+                print("------> File hosts.txt not a valid CSV comma delimited file")
+                sys.exit(2)
     check_data_validity("hosts.txt")
     
 #Now let's enabled stdout and get our results
@@ -62,6 +72,9 @@ else:
     print("Online\tStatus\tAddress\t\tName")
     print("------\t------\t------------\t--------")
 
+# Check online hosts
+    offline_hosts=0
+
     for ip_address in list(ip_address_list)[1:]:
 
 #Check if the IP Address is valid
@@ -78,3 +91,9 @@ else:
             print(f"True\tSuccess\t{ip_address:<10s}\t{ip_address_list[ip_address]}",end='')
         else:
             print(f"False\tFailed\t{ip_address:<10s}\t{ip_address_list[ip_address]}",end='')
+            offline_hosts='true'
+
+    if offline_hosts == 'true':
+        sys.exit(1)
+    else : 
+        sys.exit(0)
