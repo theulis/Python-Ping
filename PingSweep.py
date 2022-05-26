@@ -4,6 +4,7 @@ import wget
 import sys
 from urllib.error import HTTPError
 import socket
+import csv
 
 # Ideally we could have a centralised location where we can keep our hosts file
 # We could use GoogleDrive API to download the (private) hosts.txt file locally. 
@@ -34,6 +35,17 @@ except HTTPError as err:
         enablePrint()
         print("------> Problem while downloading file (hosts.txt) for GitHub repo")
 else:
+    
+    # Check if the file is a valid CSV file with a comma as the delimiter
+
+    def check_data_validity(file):
+        with open(file, newline='') as csvfile:
+            try:
+                dialect = csv.Sniffer().sniff(csvfile.read(1024), delimiters = ",")
+            except:
+                sys.exit("------> File hosts.txt not a valid CSV file with comma delimeter")
+    check_data_validity("hosts.txt")
+    
 #Now let's enabled stdout and get our results
     enablePrint()
 
@@ -42,7 +54,7 @@ else:
     ip_address_list = {}
     source_file = open("hosts.txt")
     for line in source_file:
-        key, value = line.split()
+        key, value = line.split(",")
         ip_address_list[key] = value
 
 # Ping each IP address and confirm if online
@@ -56,14 +68,13 @@ else:
         try:
             socket.inet_aton(ip_address)
         except OSError as error:
-            print(f"xxxxx\txxxxx\tInvalid_IP\t{ip_address_list[ip_address]}")
+            print(f"xxxxx\txxxxx\tInvalid_IP\t{ip_address_list[ip_address]}",end='')
             continue
 
 # If IP address is valid start a ping pequest for each IP Address
 
         response = os.popen(f"ping {ip_address} -c 1 -W 1").read()
         if "64 bytes" in response:
-            print(f"True\tSuccess\t{ip_address:<10s}\t{ip_address_list[ip_address]}")
+            print(f"True\tSuccess\t{ip_address:<10s}\t{ip_address_list[ip_address]}",end='')
         else:
-            print(f"False\tFailed\t{ip_address:<10s}\t{ip_address_list[ip_address]}")
-
+            print(f"False\tFailed\t{ip_address:<10s}\t{ip_address_list[ip_address]}",end='')
