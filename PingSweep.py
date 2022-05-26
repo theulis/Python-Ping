@@ -44,7 +44,7 @@ except HTTPError as err:
 
 else:
     
-    # Check if the file is a valid CSV file with a comma as the delimiter
+# Check if the file is a valid CSV file with a comma as the delimiter
 
     def check_data_validity(file):
         with open(file, newline='') as csvfile:
