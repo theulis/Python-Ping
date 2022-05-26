@@ -1,0 +1,6 @@
+IP_address Hostname Bad_Line
+1.1.1.1 CloudFlare-1 333
+1.0.0.1 CloudFlare-2 3422424
+8.8.8.8 Google-1 423423
+8.4.4.8 Google-Not 433242
+156.300.300.1 Invalid 422423
